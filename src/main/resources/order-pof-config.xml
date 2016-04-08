@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+
+<pof-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://xmlns.oracle.com/coherence/coherence-pof-config"
+            xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-pof-config
+   coherence-pof-config.xsd">
+    <user-type-list>
+        <include>coherence-pof-config.xml</include>
+
+        <!-- User types must be above 1000 -->
+        <user-type>
+            <type-id>1042</type-id>
+            <class-name>com.company.Order</class-name>
+            <serializer>
+                <class-name>com.company.OrderPofSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1043</type-id>
+            <class-name>com.company.LineItem</class-name>
+            <serializer>
+                <class-name>com.company.LIPofSerializer</class-name>
+            </serializer>
+        </user-type>
+    </user-type-list>
+    <enable-references>true</enable-references>
+</pof-config>
