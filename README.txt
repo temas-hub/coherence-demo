@@ -1,3 +1,5 @@
+Demo cluster which shows RTC client read/write scenario + POF serialization + eviction
+
 1)CacheServer
 com.examples.CacheServer
 -Dtangosol.coherence.cacheconfig="cachesrv/example-config.xml"
