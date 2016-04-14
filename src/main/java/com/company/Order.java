@@ -1,5 +1,9 @@
 package com.company;
 
+import com.examples.RealTimeClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +13,9 @@ import java.util.List;
  * Date: 3/28/16.
  */
 public class Order{
+
+    private static Logger logger = LoggerFactory.getLogger(Order.class);
+
     String id;
     List<LineItem> items;
     Boolean complete;
@@ -37,9 +44,13 @@ public class Order{
         this.complete = b;
     }
 
+    public List<LineItem> getItems() {
+        return items;
+    }
+
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
         in.defaultReadObject();
-        System.out.println("readObject");
+        logger.debug("readObject");
     }
 
     @Override

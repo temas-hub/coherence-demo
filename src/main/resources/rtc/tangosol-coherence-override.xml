@@ -7,7 +7,12 @@
       <member-identity>
          <cluster-name>rtc</cluster-name>
       </member-identity>
-        
+      <well-known-addresses>
+         <socket-address id="1">
+            <address>192.168.0.100</address>
+            <port>8088</port>
+         </socket-address>
+      </well-known-addresses>
    </cluster-config>
   
    <configurable-cache-factory-config>

@@ -3,6 +3,8 @@ package com.company;
 import com.tangosol.io.pof.PofReader;
 import com.tangosol.io.pof.PofSerializer;
 import com.tangosol.io.pof.PofWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
  */
 public class OrderPofSerializer implements PofSerializer<Order>{
     public static final int USER_ID = 1;
+    private static Logger logger = LoggerFactory.getLogger(OrderPofSerializer.class);
 
     public Order deserialize(PofReader in)
             throws IOException
@@ -29,7 +32,7 @@ public class OrderPofSerializer implements PofSerializer<Order>{
 
         in.readRemainder();
 
-        System.out.println("de");
+        logger.debug("de");
         return o;
     }
 
@@ -43,6 +46,6 @@ public class OrderPofSerializer implements PofSerializer<Order>{
 
         // mark that writing the object is done
         out.writeRemainder(null);
-        System.out.println("se");
+        logger.debug("se");
     }
 }

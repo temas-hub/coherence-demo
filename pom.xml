@@ -11,11 +11,6 @@
         <coherence.version>12.2.1</coherence.version>
     </properties>
 
-    <modules>
-        <module>../../../../work/wssg/git/CatalogDomain/CatalogDomainImpl</module>
-        <module>../../../../work/wssg/git/CatalogDomain/CatalogDomainAPI</module>
-    </modules>
-
 
     <dependencies>
         <dependency>
@@ -25,10 +20,16 @@
             <scope>system</scope>
             <systemPath>${env.COHERENCE_HOME}/lib/coherence.jar</systemPath>
         </dependency>
+
         <dependency>
-            <groupId>com.oracle.coherence.incubator</groupId>
-            <artifactId>coherence-common</artifactId>
-            <version>12.3.2-SNAPSHOT</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 
