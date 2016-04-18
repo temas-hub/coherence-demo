@@ -32,6 +32,11 @@ public class MapLoggingStore extends MapCacheStore {
     @Override
     public void store(final Object key, final Object value) {
         logger.debug("Store starts for key " + key + " and value "+ value);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         super.store(key, value);
         logger.debug("Store ends for key " + key + " and value "+ value);
     }
@@ -39,6 +44,11 @@ public class MapLoggingStore extends MapCacheStore {
     @Override
     public void storeAll(final Map mapEntries) {
         logger.debug("Bulk store starts for map " + mapEntries);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         super.storeAll(mapEntries);
         logger.debug("Bulk store ends for map " + mapEntries);
     }

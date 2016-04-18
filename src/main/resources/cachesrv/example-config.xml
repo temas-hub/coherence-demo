@@ -14,7 +14,7 @@
       <distributed-scheme>
          <scheme-name>distributed</scheme-name>
          <service-name>DistributedCache</service-name>
-         <backing-map-scheme>            
+         <backing-map-scheme>
            <read-write-backing-map-scheme>
                <scheme-name>example-read-write-map-scheme</scheme-name>
                <internal-cache-scheme>
@@ -22,6 +22,7 @@
                    <eviction-policy>HYBRID</eviction-policy>
                    <unit-calculator>BINARY</unit-calculator>
                    <high-units>0</high-units>
+                   <expiry-delay>400s</expiry-delay>
                  </local-scheme>
                </internal-cache-scheme>
                <miss-cache-scheme>
@@ -55,6 +56,7 @@
             </init-params>
           </instance>
         </serializer>
+        <backup-count>1</backup-count>
         <autostart>true</autostart>
       </distributed-scheme>	  
    </caching-schemes>

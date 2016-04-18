@@ -5,44 +5,130 @@ import com.company.Order;
 import com.tangosol.net.CacheFactory;
 import com.tangosol.net.ConfigurableCacheFactory;
 import com.tangosol.net.DefaultCacheServer;
+import com.tangosol.net.Invocable;
+import com.tangosol.net.InvocationObserver;
+import com.tangosol.net.InvocationService;
+import com.tangosol.net.Member;
 import com.tangosol.net.NamedCache;
+import com.tangosol.net.PartitionedService;
+import com.tangosol.net.partition.PartitionSet;
+import com.tangosol.util.Filter;
+import com.tangosol.util.InvocableMap;
+import com.tangosol.util.filter.PartitionedFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
+import java.util.Map;
 
 public class RealTimeClient {
 
     public static final String CACHE_NAME = "hello-example";
     public static final String KEY = "ggg5";
+    private static final int ORDERS_COUNT = 50;
 
     private static Logger logger = LoggerFactory.getLogger(RealTimeClient.class);
+
+    public static class UpdateJob implements Invocable {
+        private transient Object result = null ;
+        private String cacheName ;
+        public UpdateJob (String cacheName) {
+            this.cacheName = cacheName ;
+        }
+        public void init ( InvocationService invocationservice ) {
+        }
+        public void run () {
+            NamedCache cache = CacheFactory.getCache (cacheName);
+            for (int i = 0; i < ORDERS_COUNT; i++) {
+                String key = KEY + i;
+                if (cache.lock(key, 0)) {
+                    try {
+                        Order value = (Order)cache.get(key);
+                        LineItem lNew = new LineItem("u" + i,value);
+                        value.addItem(lNew);
+                        cache.remove(key);
+                        cache.put(key,value);
+                    } finally {
+                        cache.unlock(key);
+                    }
+                }
+            }
+        }
+        public Object getResult () {
+            return result ;
+        }
+    }
 
 
     public static void main(String[] args) throws InterruptedException{
 
         CacheFactory.ensureCluster();
         NamedCache cache = CacheFactory.getCache(CACHE_NAME);
-//        Order o1 = new Order(KEY,"u1");
-//        Order o1_2 = new Order(KEY,"u1");
-//        LineItem li1 = new LineItem("li5",o1);
-//        o1.addItem(li1);
-//        cache.put(o1.getId(),o1);
 
-        //logger.debug("Value in cache is " + ((Order)cache.get(KEY)).getItems());
-
-//        Thread.sleep(3000);
-        //cache.remove(o1.getId());
-
-//        LineItem li2 = new LineItem("l2",o1_2);
-//        o1_2.addItem(li2);
-//        cache.put(o1.getId(),o1_2);
-
-        for (int i = 0; i < 40; i++) {
+        long start = System.currentTimeMillis();
+        //insert
+        for (int i = 0; i < ORDERS_COUNT; i++) {
             Order oNew = new Order(KEY + i,"u1" + i);
             LineItem lNew = new LineItem("l" + i,oNew);
             oNew.addItem(lNew);
             cache.put(oNew.getId(),oNew);
-            Thread.sleep(500);
         }
+        long insertDelta = System.currentTimeMillis() - start;
+        start = System.currentTimeMillis();
+        // update
+//        for (int i = 0; i < ORDERS_COUNT; i++) {
+//            String key = KEY + i;
+//            Order value = (Order)cache.get(key);
+//            if (value != null) {
+//                LineItem lNew = new LineItem("u" + i,value);
+//                value.addItem(lNew);
+//                cache.remove(key);
+//                cache.put(key,value);
+//            }
+//        }
+
+
+        // update with lock
+
+//        final InvocationService invocationService = (InvocationService)CacheFactory.getService("ExtendTcpInvocationService");
+//
+//        logger.info("Update is started");
+//        invocationService.execute(new UpdateJob(CACHE_NAME), null, new InvocationObserver() {
+//            public void memberCompleted(final Member member, final Object o) {
+//                logger.info("Member {} is done ", member);
+//            }
+//
+//            public void memberFailed(final Member member, final Throwable throwable) {
+//                logger.info("Member {} is done ", member);
+//            }
+//
+//            public void memberLeft(final Member member) {
+//                logger.info("Member {} is done ", member);
+//            }
+//
+//            public void invocationCompleted() {
+//                logger.info("Update is complete");
+//            }
+//        });
+
+//        for (int i = 0; i < ORDERS_COUNT; i++) {
+//            String key = KEY + i;
+//            if (cache.lock(key, 0)) {
+//                try {
+//                    Order value = (Order)cache.get(key);
+//                    LineItem lNew = new LineItem("u" + i,value);
+//                    value.addItem(lNew);
+//                    cache.remove(key);
+//                    cache.put(key,value);
+//                } finally {
+//                    cache.unlock(key);
+//                }
+//            }
+//        }
+
+        logger.info("Inserted in {}",  ORDERS_COUNT / insertDelta * 100);
+        //logger.info("Updated in {}", ORDERS_COUNT / (System.currentTimeMillis() - start) * 100);
+
 
         //logger.debug("Value in cache after update is " + ((Order)cache.get(KEY)).getItems());
 

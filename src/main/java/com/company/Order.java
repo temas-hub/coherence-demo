@@ -13,8 +13,11 @@ import java.util.List;
  * Date: 3/28/16.
  */
 public class Order{
-
     private static Logger logger = LoggerFactory.getLogger(Order.class);
+
+    static {
+        logger.debug("Order initialized");
+    }
 
     String id;
     List<LineItem> items;

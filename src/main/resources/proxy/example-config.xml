@@ -12,53 +12,24 @@
    
    <caching-schemes>
       <distributed-scheme>
-         <scheme-name>distributed</scheme-name>
-         <service-name>DistributedCache</service-name>
-				<backing-map-scheme>
-					<read-write-backing-map-scheme>
-						<scheme-name>example-read-write-map-scheme</scheme-name>
-						<internal-cache-scheme>
-							<local-scheme>
-								<eviction-policy>HYBRID</eviction-policy>
-								<unit-calculator>BINARY</unit-calculator>
-								<high-units>0</high-units>
-							</local-scheme>
-						</internal-cache-scheme>
-						<miss-cache-scheme>
-							<local-scheme>
-								<expiry-delay>3</expiry-delay>
-								<listener>
-									<class-scheme>
-										<class-name>com.examples.EchoBakingMapListener</class-name>
-									</class-scheme>
-								</listener>
-							</local-scheme>
-						</miss-cache-scheme>
-						<cachestore-scheme>
-							<class-scheme>
-								<class-name>com.examples.MapLoggingStore</class-name>
-							</class-scheme>
-						</cachestore-scheme>
-						<write-delay>10s</write-delay>
-						<!--<write-batch-factor>0.5</write-batch-factor>-->
-						<write-requeue-threshold>3000</write-requeue-threshold>
-					</read-write-backing-map-scheme>
-				</backing-map-scheme>
-				<serializer>
-					<instance>
-						<class-name>com.tangosol.io.pof.ConfigurablePofContext</class-name>
-						<init-params>
-							<init-param>
-								<param-type>String</param-type>
-								<param-value>order-pof-config.xml</param-value>
-							</init-param>
-						</init-params>
-					</instance>
-				</serializer>
-         <autostart>true</autostart>
+         	<scheme-name>distributed</scheme-name>
+         	<service-name>DistributedCache</service-name>
+					<serializer>
+						<instance>
+							<class-name>com.tangosol.io.pof.ConfigurablePofContext</class-name>
+							<init-params>
+								<init-param>
+									<param-type>String</param-type>
+									<param-value>order-pof-config.xml</param-value>
+								</init-param>
+							</init-params>
+						</instance>
+					</serializer>
+         	<autostart>true</autostart>
       </distributed-scheme>
 
-	  <proxy-scheme>
+
+<proxy-scheme>
 		  <service-name>ExtendTcpProxyService</service-name>
 		  <acceptor-config>
 			 <tcp-acceptor>
