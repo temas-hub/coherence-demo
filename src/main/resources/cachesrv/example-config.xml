@@ -22,7 +22,7 @@
                    <eviction-policy>HYBRID</eviction-policy>
                    <unit-calculator>BINARY</unit-calculator>
                    <high-units>0</high-units>
-                   <expiry-delay>400s</expiry-delay>
+                   <expiry-delay>10s</expiry-delay>
                  </local-scheme>
                </internal-cache-scheme>
                <miss-cache-scheme>
@@ -40,7 +40,7 @@
                    <class-name>com.examples.MapLoggingStore</class-name>
                  </class-scheme>
                </cachestore-scheme>
-             <write-delay>10s</write-delay>
+             <write-delay>20s</write-delay>
              <!--<write-batch-factor>0.5</write-batch-factor>-->
              <write-requeue-threshold>3000</write-requeue-threshold>
            </read-write-backing-map-scheme>

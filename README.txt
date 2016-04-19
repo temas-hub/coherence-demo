@@ -13,6 +13,6 @@ com.examples.CacheServer
 
 3)RealTimeClient
 com.examples.RealTimeClient
--Dtangosol.coherence.override="rtc/tangosol-coherence-override.xml"
 -Dtangosol.coherence.cacheconfig="rtc/example-config.xml"
 -Dtangosol.coherence.distributed.localstorage=false
+-Dtangosol.coherence.tcmp.enabled=false

@@ -25,44 +25,44 @@ public class RealTimeClient {
 
     public static final String CACHE_NAME = "hello-example";
     public static final String KEY = "ggg5";
-    private static final int ORDERS_COUNT = 50;
+    private static final int ORDERS_COUNT = 5;
 
     private static Logger logger = LoggerFactory.getLogger(RealTimeClient.class);
 
-    public static class UpdateJob implements Invocable {
-        private transient Object result = null ;
-        private String cacheName ;
-        public UpdateJob (String cacheName) {
-            this.cacheName = cacheName ;
-        }
-        public void init ( InvocationService invocationservice ) {
-        }
-        public void run () {
-            NamedCache cache = CacheFactory.getCache (cacheName);
-            for (int i = 0; i < ORDERS_COUNT; i++) {
-                String key = KEY + i;
-                if (cache.lock(key, 0)) {
-                    try {
-                        Order value = (Order)cache.get(key);
-                        LineItem lNew = new LineItem("u" + i,value);
-                        value.addItem(lNew);
-                        cache.remove(key);
-                        cache.put(key,value);
-                    } finally {
-                        cache.unlock(key);
-                    }
-                }
-            }
-        }
-        public Object getResult () {
-            return result ;
-        }
-    }
+//    public static class UpdateJob implements Invocable {
+//        private transient Object result = null ;
+//        private String cacheName ;
+//        public UpdateJob (String cacheName) {
+//            this.cacheName = cacheName ;
+//        }
+//        public void init ( InvocationService invocationservice ) {
+//        }
+//        public void run () {
+//            NamedCache cache = CacheFactory.getCache (cacheName);
+//            for (int i = 0; i < ORDERS_COUNT; i++) {
+//                String key = KEY + i;
+//                if (cache.lock(key, 0)) {
+//                    try {
+//                        Order value = (Order)cache.get(key);
+//                        LineItem lNew = new LineItem("u" + i,value);
+//                        value.addItem(lNew);
+//                        cache.remove(key);
+//                        cache.put(key,value);
+//                    } finally {
+//                        cache.unlock(key);
+//                    }
+//                }
+//            }
+//        }
+//        public Object getResult () {
+//            return result ;
+//        }
+//    }
 
 
     public static void main(String[] args) throws InterruptedException{
 
-        CacheFactory.ensureCluster();
+        //CacheFactory.ensureCluster();
         NamedCache cache = CacheFactory.getCache(CACHE_NAME);
 
         long start = System.currentTimeMillis();
