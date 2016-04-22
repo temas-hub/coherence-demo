@@ -2,7 +2,9 @@ package com.examples;
 
 import com.company.LineItem;
 import com.company.Order;
+import com.company.OrderPofSerializer;
 import com.tangosol.net.CacheFactory;
+import com.tangosol.net.CacheService;
 import com.tangosol.net.ConfigurableCacheFactory;
 import com.tangosol.net.DefaultCacheServer;
 import com.tangosol.net.Invocable;
@@ -14,7 +16,10 @@ import com.tangosol.net.PartitionedService;
 import com.tangosol.net.partition.PartitionSet;
 import com.tangosol.util.Filter;
 import com.tangosol.util.InvocableMap;
+import com.tangosol.util.ValueExtractor;
+import com.tangosol.util.extractor.PofExtractor;
 import com.tangosol.util.filter.PartitionedFilter;
+import com.tangosol.util.processor.ExtractorProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +79,21 @@ public class RealTimeClient {
             cache.put(oNew.getId(),oNew);
         }
         long insertDelta = System.currentTimeMillis() - start;
+        logger.info("Inserted in {}",  1.0 * ORDERS_COUNT / insertDelta * 100);
         start = System.currentTimeMillis();
+
+        CacheService cacheService = cache.getCacheService();
+        cacheService.destroyCache(cache);
+
+        logger.info("Destroyed in {}",  System.currentTimeMillis() - start);
+
+        start = System.currentTimeMillis();
+        Thread.sleep(5000);
+
+        ValueExtractor userIdExtractor = new PofExtractor(String.class, OrderPofSerializer.USER_ID);
+        String userId = (String)cache.invoke(KEY + 1, new ExtractorProcessor(userIdExtractor));
+        logger.info("UserId = " + userId);
+
         // update
 //        for (int i = 0; i < ORDERS_COUNT; i++) {
 //            String key = KEY + i;
@@ -82,7 +101,7 @@ public class RealTimeClient {
 //            if (value != null) {
 //                LineItem lNew = new LineItem("u" + i,value);
 //                value.addItem(lNew);
-//                cache.remove(key);
+//                //cache.remove(key);
 //                cache.put(key,value);
 //            }
 //        }
@@ -126,7 +145,7 @@ public class RealTimeClient {
 //            }
 //        }
 
-        logger.info("Inserted in {}",  ORDERS_COUNT / insertDelta * 100);
+
         //logger.info("Updated in {}", ORDERS_COUNT / (System.currentTimeMillis() - start) * 100);
 
 
